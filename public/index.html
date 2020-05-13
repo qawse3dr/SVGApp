@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>SVG editor</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="SVG editor">
+    <meta name="keywords" content="SVG">
+    <meta name="author" content="Lawrence Milne">
+    <!-- Load jquery, bootstrap -->
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <!-- Custom CSS -->
+    <link rel="stylesheet" type="text/css" href="/style.css">
+    <!-- Custom CSS End -->
+</head>
+<body>
+    <div class="image-drop-down-wrapper">
+        <select class="image-drop-down" name="imageSelector">
+          <option value="">select an image</option>
+        </select>
+    </div>
+
+    <!--login -->
+    <div class="login" >
+      <!-- The Modal -->
+      <div class="modal" id="loginPopup">
+        <div class="modal-dialog">
+          <div class="modal-content">
+
+            <!-- Modal Header -->
+            <div class="modal-header" id="loginPopup">
+              <h4 class="modal-title">LOGIN</h4>
+            </div>
+
+            <!-- Modal body -->
+            <div class="modal-body" id="loginPopup">
+              <form class="loginForm" action="login" method="post">
+                <label for="username">User Name: </label>
+                <input type="text" name="username">
+                <br/>
+                <label for="password">Password: </label>
+                <input type="password" name="password">
+                <br/>
+                <label for="databaseName">Database Name: </label>
+                <input type="text" name="databaseName">
+                <br/>
+                <button type="submit" name="button">Login</button>
+              </form>
+            </div>
+
+
+          </div>
+        </div>
+      </div>
+    </div>
+    <!--title -->
+    <header>
+        SVG EDITOR
+    </header>
+    <!--for spacing-->
+    </br>
+    <!-- Will be used to go from one panel to the next-->
+    <div class="sticky-menu">
+        <div class="navigator btn-group btn-group-vertical">
+            <button class="btn" type="button" name="file-log">File Log</button>
+            <button class="btn" type="button" name="svg-view-panel">SVG View</button>
+            <button class="btn" type="button" name="add-shapes">Add Objects</button>
+            <button class="btn" type="button" name="edit-attr">Edit Attribues</button>
+            <button class="btn" type="button" name="scale">Scale Image</button>
+            <button class="btn" type="button" name="database">Database</button>
+        </div>
+    </div>
+
+    <!-- The application div-->
+    <div class="app-view">
+        <!-- filelog table-->
+        <div class="file-log">
+            <h3>File Log</h3>
+            <div class="file-log-table-wrapper">
+              <table class="table" id="file-log-table">
+                  <thead class="thead-dark">
+                      <tr>
+                        <th scope="col">Image (click to download)</th>
+                        <th scope="col">File name (click to download)</th>
+                        <th scope="col">File size</th>
+                        <th scope="col">Number of rectangles</th>
+                        <th scope="col">Number of circles</th>
+                        <th scope="col">Number of paths</th>
+                        <th scope="col">Number of groups</th>
+                      </tr>
+                  </thead>
+                  <tbody id="SVGimages">
+                      <tr>
+                          <td>No files</td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                      </tr>
+                  </tbody>
+
+              </table>
+            </div>
+
+
+
+        </div>
+        <!-- SVG View Panel-->
+        <div class="svg-view-panel">
+          <h3>SVG view</h3>
+
+          <table  class="table table-striped"  id="svg-view-table">
+
+              <td colspan="3">
+                <img src="" id="svg-view-image"/>
+              </td>
+
+              <tr>
+                <th>Title</th>
+                <th colspan="2">Description</th>
+              </tr>
+              <tr>
+                <td>
+                  <div class="title-wrapper">
+                    <h6 id="title"></h6>
+                  </div>
+                </td>
+                <td colspan="2">
+                  <div class="desc-wrapper">
+                    <h6 id="desc"></h6>
+                  </div>
+                </td>
+              </tr>
+
+              <tr>
+                  <th>Component</th>
+                  <th>Summary</th>
+                  <th>Other attributes</th>
+              </tr>
+
+            <tbody id="svg-components" >
+
+            </tbody>
+          </table>
+        </div>
+
+        <!-- add shape view panel-->
+        <div class="add-shapes">
+          <h3>Add Shape</h3>
+
+          <div class="">
+            <div class="shape-buttons-group">
+
+              <button type="button" name="create-rect">Rectangle</button>
+              <button type="button" name="create-circle">Circle</button>
+            </div>
+
+            <div class="create-shape-view">
+              <!-- input to create a rect -->
+              <div class="create-rect">
+                  <header>Rectangle</header>
+                  <form class="rect-form" action="/addRect" method="get">
+                    <label for="x">X:</label>
+                    <input type="number" name="x" value="0" placeholder="0"  step="any">
+                    <label for="width">Width:</label>
+                    <input type="number" name="width" value="0" placeholder="0" min="0" step="any">
+                    <label for="rect-units">Units:</label>
+                    <select class="rect-units" name="rect-units">
+                        <option value="">None</option>
+                        <option value="em">em</option>
+                        <option value="px">px</option>
+                        <option value="in">in</option>
+                        <option value="cm">cm</option>
+                        <option value="mm">mm</option>
+                        <option value="pt">pt</option>
+                        <option value="pc">pc</option>
+                        <option value="%">%</option>
+
+                    </select>
+                    <br/>
+                    <label for="y">Y:</label>
+                    <input type="number" name="y" value="0" placeholder='0' step="any">
+                    <label for="height">Height:</label>
+                    <input type="number" name="height" value="0" placeholder="0"  min="0" step="any">
+                    <button type="submit">Create</button>
+
+                  </form>
+              </div>
+              <!-- input to create a circle -->
+              <div class="create-circle">
+                  <header>Circle</header>
+                  <form class="circle-form" action="/addCircle" method="get">
+                  <!-- x-->
+                  <label for="cx">CX:</label>
+                  <input type="number" name="cx" value="0" step="any" >
+                  <!-- r-->
+                  <label for="r">R:</label>
+                  <input type="number" name="r" value="0" step="any" min="0">
+                  <br/>
+                  <!-- y-->
+                  <label for="cy">CY:</label>
+                  <input type="number" name="cy" value="0" step="any">
+                  <!-- units -->
+                  <label for="circle-units">Units:</label>
+                  <select class="circle-units" name="circle-units">
+                    <option value="">None</option>
+                    <option value="em">em</option>
+                    <option value="px">px</option>
+                    <option value="in">in</option>
+                    <option value="cm">cm</option>
+                    <option value="mm">mm</option>
+                    <option value="pt">pt</option>
+                    <option value="pc">pc</option>
+                    <option value="%">%</option>
+                  </select>
+                  <button type="submit" name="button">Create</button>
+                </form>
+              </div>
+            </div>
+          </div>
+
+
+          <h3>Create SVG</h3>
+          <div class="create-svg">
+            <form class="create-svg-form" method="post">
+              <label for="fileName">File Name:</label>
+              <input type="text" name="fileName">
+              </br>
+              <label for="title">Title:</label>
+              <input type="text" name="title">
+              </br>
+              <label for="desc">Description:</label>
+              <input type="text" name="desc">
+              </br>
+              <button type="submit">Create SVG</button>
+            </form>
+          </div>
+          <div class="upload-image">
+            <h2>
+              UPLOAD IMAGE
+            </h2>
+            <h5>
+            <form id="upload-form" action='/upload' method='POST' enctype="multipart/form-data">
+              <label for="uploadFile"></label>
+              <input id="file" type="file" name="uploadFile" accept=".svg"/>
+
+               <button type='submit' value='Upload!'>Upload</button>
+            </form>
+          </h5>
+          </div>
+
+        <!-- This is used to submit shapes to the svg-->
+        </div>
+
+        <!-- table for editing attributes-->
+        <div class="edit-attr">
+            <!--NEEDS a dropdown and a view for each type of element based on
+                seleted attribute-->
+          <form class="edit-SVG" action="/editsvg" method="post">
+            <div class="attr-dropdown-wrapper">
+              <div class="inline-titles">
+                <button type="submit" name="button">Save Changes</button>
+              </div>
+              <div class="inline-titles">
+                <h6>Edit Attributes</h6>
+              </div>
+
+              <div class="inline-titles">
+                <select class="attr-dropdown" name="comp">
+                  <option value="">Select Element</option>
+                </select>
+              </div>
+            </div>
+            <div class="edit-attr-table-wrapper">
+              <table class="table">
+                <thead class="thead-dark">
+                  <th>Name</th>
+                  <th>Value</th>
+                  <th>New Value</th>
+                </thead>
+                <tbody class="attr-table">
+                  <tr>
+                    <td>No Attibutes</td>
+                    <td></td>
+                    <td></td>
+                  </tr>
+
+                </tbody>
+              </table>
+            </div>
+
+          </form>
+        </div>
+
+        <!--resizes the data-->
+        <div class="scale">
+            <h3>Scale image</h3>
+            <form class="scale-img-form" action="/scale" method="post">
+                    <!--input for the factor the chosen type wil be scaled -->
+                    <div class="factor-input" >
+                        <label for="factor">Scale Factor:</label>
+                        <input type="number" name="factor" value="" step="any" min="0.01">
+
+                    </div>
+                    <!--radio buttons to pick what should be scaled -->
+                    <div class="scaleType-input">
+                        <label for="scaleType">Scale Type</label>
+                        </br>
+                        <!--This is the selection of what to ressize-->
+                        <ul>
+                          <li>
+                            <label for="rect">Rect:</label>
+                            <input type="radio" id="rect" name="scaleType" value="1">
+                          </li>
+                          <li>
+                            <label for="circle">Circle:</label>
+                            <input type="radio" id="circle" name="scaleType" value="0">
+                          </li>
+                          <li>
+                            <label for="all">Image:</label>
+                            <input type="radio" id="all" name="scaleType" value="2">
+                          </li>
+
+                        </ul>
+                    </div>
+                    <!-- submit for the scaling the image-->
+                    <div class="submit-scale">
+                        <button type="submit" name="rect">Scale</button>
+                    </div>
+            </form>
+        </div>
+
+        <!-- a4 functions -->
+        <div class="database">
+          <button type="button" name="button" onclick="storeFilesDB()">Store All Files</button>
+          <button type="button" name="button" onclick="delFilesDB()">Clear All Data</button>
+          <button type="button" name="button" onclick="displayDBStatus()">Display DB Status</button>
+          <button type="button" name="button">Execute Query</button>
+          <div class="queryOptions">
+
+            <label for="all-files">Show all files: </label>
+            <input type="radio" name="executeOption" value="all-files"/>
+
+            <label for="files-created-from-dates">Show files created from data: </label>
+            <input type="radio" name="executeOption" value="files-created-from-dates"/>
+
+            <label for="files-modified-from-dates">Show files modified from data: </label>
+            <input type="radio" name="executeOption" value="files-modified-from-dates"/>
+
+            <label for="files-shape-count">Show files with n shape: </label>
+            <input type="radio" name="executeOption" value="files-shape-count"/>
+
+            <label for="files-n">Show n most freq downloaded: </label>
+            <input type="radio" name="executeOption" value="files-n"/>
+
+            <label for="changes-to-file">Show changes to current file: </label>
+            <input type="radio" name="executeOption" value="changes-to-file"/>
+
+          </div>
+
+          <table class="DBTable table table-striped">
+            <thead>
+              <th>DATA BASE QUERY RESULT</th>
+            </thead>
+            <tbody>
+              <td></td>
+            </tbody>
+          </table>
+        </div>
+    </div>
+    <!-- Leave me at the bottom of body -->
+    <script src="/index.js"></script>
+</body>
+</html>

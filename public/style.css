@@ -1,0 +1,418 @@
+html {
+    width: 80%;
+    height: 100%;
+    min-height: 100%;
+    margin: 0 auto;
+    color:white;
+
+    font-size: 16px;
+    background-color:#263031;
+
+}
+body {
+    text-align: center;
+    height: 100%;
+    min-height: 100%;
+    line-height: 1.75;
+    background-color:#263031;
+
+}
+
+a:link:hover {
+    -webkit-transition: all 0.3s ease;
+    -moz-transition: all 0.3s ease;
+    transition: all 0.3s ease;
+    text-decoration: underline;
+    cursor: pointer;
+    cursor: hand;
+}
+input[type=submit], button {
+    cursor: pointer;
+    cursor: hand;
+}
+@media(max-width: 900px) {
+    html {
+        font-size: 14px !important;
+        width:80%;
+    }
+}
+@media(max-height: 700px){
+  html{
+      min-height:70px:
+  }
+}
+@media(max-height: 500px){
+  html{
+      min-height:70px:
+  }
+}
+@media(max-width: 480px) {
+    html {
+        font-size: 12px !important;
+        width: 90% !important;
+
+    }
+}
+
+@media(max-width: 320px) {
+    html {
+        font-size: 12px !important;
+        width: 100% !important;
+    }
+}
+/*sets the colour of text to white*/
+header, h1, h2, h3, h4, h5, h6, label{
+    color:white;
+}
+/**button styling*/
+button:hover{
+    background: #091A32;
+
+}
+/*global theming for buttons*/
+button{
+      background-color: #1A355B;
+      color:white;
+}
+
+/*global theming for select dropdown*/
+select{
+  background-color: #1A355B;
+  color:white;
+}
+
+/**default theming for tables*/
+table, th, td{
+    border-width: 1px;
+    color: white;
+    border-color: white;
+    border-style:solid;
+    min-height:50px;
+    height:50px;
+}
+
+/*the allow for the tables to become to small*/
+td,th{
+  min-width: 120px;
+}
+
+/*the div for uploading the image*/
+.upload-image{
+  height:auto;
+  margin-top:5%;
+  border-top: white solid 1px;
+  width:100%;
+}
+
+/*forces the height to be max for the upload form*/
+#uploadForm{
+  height:100%;
+}
+
+/**Sytling for the application*/
+.app-view{
+    margin-left:10%;
+    overflow-x: scroll;
+    overflow-y: scroll;
+    height:90%;
+    width:100%;
+    border-width: 3px;
+    border-color: white;
+    border-style:solid;
+    border:3%;
+
+}
+/*for the file log panel*/
+.file-log{
+
+    visibility: visible;
+    display: block;
+    height:100%;
+    min-height: 200px;
+    min-width: 400px;
+    width: 100%;
+
+}
+
+
+/*formating for the file-log panel*/
+#file-log-table{
+    width:90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    word-wrap: anywhere;
+}
+
+/*for the file uploader form*/
+#file uploadForm > input{
+  color:white;
+  background-color: white;
+
+}
+
+/*For SVGView Panel*/
+.svg-view-panel {
+    /**used to hide and show panel*/
+    visibility: hidden;
+    display: none;
+    /******/
+    width:100%;
+    min-height: 600px;
+    min-width: 400px;
+}
+
+/*gets rid of line break after title*/
+.svg-view-panel > h3{
+  text-align: center;
+}
+
+/*forces the drop not to move*/
+.image-drop-down-wrapper{
+    position: absolute;
+
+}
+
+/**Posistioning for the table in svg view*/
+#svg-view-table{
+    width:90%;
+    margin-left: 5%;
+    margin-right: 5%;
+    word-wrap: anywhere; /*stops words from getting to big*/
+}
+
+/*sizeof image thumbnail*/
+.image-thumbnail{
+    width:200px;
+    background-color: white;
+}
+
+/*sizeof image in svg view*/
+#svg-view-image{
+  width:800px;
+  background-color: white;
+}
+
+/*the posistioning for the title and
+description data in the svg table*/
+#title, #desc{
+  margin-left:3%;
+  margin-right:3%;
+  text-align:left;
+  width:93%;
+  height:100%;
+  /*stops text from going on forever*/
+  word-wrap: anywhere;
+}
+
+/*titleWraper for title*/
+.title-wrapper,.desc-wrapper{
+  word-wrap: break-word;
+  min-height:50px;
+  height:wrap-content;
+  min-width:200px;
+  overflow-x:
+}
+/**sets size of title div*/
+.title-wrapper{
+  width:35%;
+}
+.description{width:65%;}
+/*Styles for add shape panel*/
+.add-shapes{
+    /**used to hide and show panel*/
+    visibility: hidden;
+    display: none;
+    /******/
+  margin-top:0%;
+  height:100%;
+  min-width: 730px;
+}
+
+/**Styling for the create svg*/
+.create-svg{
+  text-align: right;
+  width:max-content;
+  margin-left:35%;
+
+
+}
+
+/**The panel to create shapes*/
+.create-shape-view{
+    float:left;
+    border-bottom: solid white 1px;
+    text-align: right;
+    width:80%;
+    /*makes it so items dont get squished*/
+    min-height: 120px;
+    min-width:500px;
+    height:auto;
+}
+.shape-buttons-group{
+  margin:0;
+  left:0;
+  text-align: left;
+  width: 20%;
+  height:50%;
+  float:left;
+}
+
+.shape-buttons-group > button{
+  margin:0;
+  left:0;
+  width:100%;
+  min-height: 60px;
+  height:100%;
+}
+
+
+.create-rect > input, .create-circle > input{
+  margin-top:0%;
+  width:14%;
+  min-width:100px;
+  min-height:30px;
+  margin-right: 3%;
+}
+
+.create-rect{
+  /**Makes it visable from the start
+  as the program goes on this will change*/
+  visibility: visible;
+  display:block;
+  /**formating the div*/
+  text-align: left;
+  width: 95%; /*for scaling*/
+  height: 100%; /*for scaling*/
+  margin-left: 5%;
+  margin-top: 0%;
+  margin-right:0%;
+  /*allows for it to be inline with another div but still use display block
+  float:left;*/
+
+}
+
+/*Used to get circle input*/
+.create-circle{
+    /**used to hide the div when circle is not selected*/
+  visibility: hidden;
+  display: none;
+
+  /*formating the div so scaling works properly*/
+  text-align: left;
+  width: 95%;
+  height: 80%;
+  margin-left: 5%;
+  margin-top: 0%;
+  margin-right:5%;
+  /**allows to be inline with other divs*/
+  float:left;
+}
+
+
+.scale{
+  display: none;
+  visibility: hidden;
+}
+
+
+/**Used to navigate the GUI*/
+.navigator{
+    top:10%;
+    position:sticky;
+    width: 100%;
+    height:40%;
+    border: solid white 4px;
+    min-width: 125px;
+    min-height:256px;
+}
+/**for the nav buttons on the right*/
+.navigator > button {
+    width:100%;
+    height:20%;
+    /*keeps them from scalling so small they disapear*/
+    min-width: 120px;
+    min-height:40px;
+}
+/*makes the menu sticky (float beside the screen)*/
+.sticky-menu{
+    position: absolute;
+    width:15%;
+    margin-left: -10%;
+    margin-top:10%;
+    height:100%;
+}
+
+/**for editing attributes*/
+.edit-attr{
+  display: none;
+  visibility: hidden;
+  height:100%;
+  width:100%;
+}
+/**forces the panel to be a constent size and not expand the div*/
+.edit-SVG{
+  height:100%;
+  width:100%;
+}
+.edit-attr-table-wrapper{
+  height:90%;
+  width:90%;
+  overflow: auto;
+  margin-left:5%;
+  margin-right:5%;
+  /**forces the text to not strech the table horizontaily*/
+  word-wrap: anywhere;
+  float: left;
+  border: white solid 1px;
+}
+/**sets a size so scaling the window doesnt break the page*/
+.attr-dropdown-wrapper{
+  height:10%;
+  width:100%;
+  text-align: center;
+  min-width: 500px;
+
+}
+
+/*shifts the button over in the edit attribute panel*/
+.attr-dropdown-wrapper > button{
+  margin-right: 25%;
+}
+
+/**for the edit attribute title*/
+.inline-titles{
+  display: inline-block;
+  height:100%;
+  max-height: 100%;
+  margin-left:5%;
+  margin-right:5%;
+}
+
+/*used for A4 functionality*/
+.database{
+  display: none;
+  visibility: hidden;
+}
+
+#loginPopup{
+  text-align: right;
+  background-color:#263031;
+  border: 2px solid black;
+}
+#loginPopup > form > input{
+  width:50%;
+}
+
+.queryOptions{
+    width:25%;
+    text-align: right;
+}
+.queryOptions > label{
+  margin:0;
+
+}
+
+.DBTable{
+  margin-left:10%;
+  width:80%;
+}
