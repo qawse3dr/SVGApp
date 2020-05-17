@@ -259,6 +259,11 @@ $(document).ready(function() {
         }
       });
     });
+
+    $(".queryTypes").children().click((event) =>{
+      resetVisibility(".queryOptions");
+      appviewSetView($("."+event.target.value));
+    })
 });
 
 //uses ajax to get and reset the table for attributes
@@ -794,6 +799,177 @@ function addChangeToDB(change_type, change_summary,fileName){
     success: (data) =>{
         console.log(data);
         alert("download info was added to the DB");
+    },
+    fail: (error) =>{
+
+        console.log(error);
+    }
+  });
+}
+
+function executeQuery(){
+
+  let queryType = new FormData($(".executeForm")[0]);
+
+  //the path to the data
+  let ajaxURL = null;
+  let form = null;
+  let data = {connectionInfo: connectionInfo};
+  //different querys
+  switch(queryType.get("executeOption")){
+    case "all-files":
+      ajaxURL = "/all-files-query";
+      form = new FormData($("#all-files-form")[0]);
+      //do error checking
+
+      data.sort = form.get("querySort");
+      if(data.sort == null){
+        alert("Select Sort");
+        return;
+      }
+      break;
+    case "files-created-from-dates":
+      ajaxURL = "/files-created-query";
+      form = new FormData($("#files-created-from-dates-form")[0]);
+
+      //sort type
+      data.sort = form.get("querySort");
+      if(data.sort == null){
+        alert("Select Sort");
+        return;
+      }
+
+      //gets start date from form and convert it to sql format
+      data.startDate = form.get("start_date");
+      if(data.startDate == ""){
+        alert("Select Start Date");
+        return;
+      }
+      data.startDate = new Date(data.startDate).toISOString().slice(0, 19).replace('T', ' ');
+
+      //get end date from form and convert it to sql format
+      data.endDate = form.get("end_date");
+      if(data.endDate == ""){
+        alert("Select End Date");
+        return;
+      }
+      data.endDate = new Date(data.endDate).toISOString().slice(0, 19).replace('T', ' ');
+      //for it to be the end of the day so it includes
+      //the current day in search
+      data.endDate = data.endDate.replace("00:00:00","23:59:59");
+      break;
+    case "files-modified-from-dates":
+      ajaxURL = "/files-mod-query";
+      form = new FormData($("#files-modified-from-dates-form")[0]);
+
+      //sort type
+      data.sort = form.get("querySort");
+      if(data.sort == null){
+        alert("Select Sort");
+        return;
+      }
+
+      data.startDate = form.get("start_date");
+      if(data.startDate == ""){
+        alert("Select Start Date");
+        return;
+      }
+      data.startDate = new Date(data.startDate).toISOString().slice(0, 19).replace('T', ' ');
+      data.endDate = form.get("end_date");
+      if(data.endDate == ""){
+        alert("Select End Date");
+        return;
+      }
+      data.endDate = new Date(data.endDate).toISOString().slice(0, 19).replace('T', ' ');
+      data.endDate = data.endDate.replace("00:00:00","23:59:59");
+      break;
+    case "files-shape-count":
+      ajaxURL = "/files-shape-query";
+      form = new FormData($("#shape-count-form")[0]);
+
+      //sort type
+      data.sort = form.get("querySort");
+      if(data.sort == null){
+        alert("Select Sort");
+        return;
+      }
+
+      data.type = form.get("shape-type");
+      if(data.type == null){
+        alert("Select Shape Type");
+        return;
+      }
+      if(data.sort == "shape_count"){
+        data.sort = data.type;
+      }
+      data.lower = form.get("shape-lower-bound");
+      data.upper = form.get("shape-upper-bound");
+      break;
+    case "files-n":
+      ajaxURL = "/files-n-query";
+      form = new FormData($("#files-n-form")[0]);
+
+      //sort type
+      data.sort = form.get("querySort");
+      if(data.sort == null){
+        alert("Select Sort");
+        return;
+      }
+
+      data.nCount = form.get("print-n");
+      break;
+    case "changes-to-file":
+      ajaxURL = "/changes-query";
+      form = new FormData($("#changes-to-file-form")[0]);
+
+      if(currentSVG == null){
+        alert("Select SVG");
+        return;
+      } else{
+        data.file_name = currentSVG;
+      }
+      //sort type
+      data.sort = form.get("querySort");
+      if(data.sort == null){
+        alert("Select Sort");
+        return;
+      }
+      data.reverse = false;
+      if(data.sort == "recent_change_first" || data.sort == "recent_change_last"){
+        if(data.sort != "recent_change_last") data.reverse = true;
+        data.sort = "change_time";
+      }
+
+      data.startDate = form.get("start_date");
+      if(data.startDate == ""){
+        alert("Select Start Date");
+        return;
+      }
+      data.startDate = new Date(data.startDate).toISOString().slice(0, 19).replace('T', ' ');
+      data.endDate = form.get("end_date");
+      if(data.endDate == ""){
+        alert("Select End Date");
+        return;
+      }
+      data.endDate = new Date(data.endDate).toISOString().slice(0, 19).replace('T', ' ');
+      data.endDate = data.endDate.replace("00:00:00","23:59:59");
+      break;
+    default:
+      alert("Select a query");
+      return;
+      break;
+  }
+
+  $.ajax({
+    type:"get",
+    dataType:'json',
+    url: ajaxURL,
+    data: data,
+    success: (data) =>{
+        console.log(data.string);
+        $("#dbTableBody").empty();
+        $("#dbTableBody").append(data.string);
+
     },
     fail: (error) =>{
 

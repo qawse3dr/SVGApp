@@ -392,6 +392,7 @@ description data in the svg table*/
 .database{
   display: none;
   visibility: hidden;
+
 }
 
 #loginPopup{
@@ -403,16 +404,88 @@ description data in the svg table*/
   width:50%;
 }
 
-.queryOptions{
+.queryTypes{
     width:25%;
     text-align: right;
+    display: inline-block;
+    float:left;
+    max-width: 300px;
 }
-.queryOptions > label{
+.queryTypes > label{
   margin:0;
+}
+/*options for the querys*/
+.queryOptions{
+  width:75%;
+  text-align: left;
+  float:right;
+}
+.queryOptions label {
+  margin-left:  10%;
+}
+.all-files{
+  display:none;
+  visibility: hidden;
+}
 
+.files-created-from-dates{
+  display: none;
+  visibility: hidden;
+}
+
+.files-modified-from-dates{
+  display: none;
+  visibility: hidden;
+}
+
+.files-shape-count{
+  display: none;
+  visibility: hidden;
+}
+
+.files-n{
+  display: none;
+  visibility: hidden;
+}
+
+.changes-to-file{
+  display: none;
+  visibility: hidden;
 }
 
 .DBTable{
-  margin-left:10%;
-  width:80%;
+  width:100%;
+}
+
+#dbTableBody{
+  font-size: 10px;
+
+}
+
+.sort-radio{
+  width:25%;
+  height:100%;
+  margin:0;
+  display: inline-block;
+  float:left;
+}
+
+.shape-count{
+
+  width:30%;
+  margin:0;
+  display: inline-block;
+  float:left
+}
+.shape-count label{
+  margin:0;
+}
+.shape-count input{
+  width:60px;
+}
+
+.shape-type{
+  display: inline-block;
+  float: left;
+  width:30%;
 }

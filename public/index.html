@@ -110,7 +110,7 @@
 
         </div>
         <!-- SVG View Panel-->
-        <div class="svg-view-panel">
+        <div class="sfriday rebvg-view-panel">
           <h3>SVG view</h3>
 
           <table  class="table table-striped"  id="svg-view-table">
@@ -144,7 +144,7 @@
 
             <tbody id="svg-components" >
 
-            </tbody>
+            </tbody>friday reb
           </table>
         </div>
 
@@ -180,7 +180,7 @@
                         <option value="pc">pc</option>
                         <option value="%">%</option>
 
-                    </select>
+                    friday reb</select>
                     <br/>
                     <label for="y">Y:</label>
                     <input type="number" name="y" value="0" placeholder='0' step="any">
@@ -198,7 +198,7 @@
                   <label for="cx">CX:</label>
                   <input type="number" name="cx" value="0" step="any" >
                   <!-- r-->
-                  <label for="r">R:</label>
+                  <friday reblabel for="r">R:</label>
                   <input type="number" name="r" value="0" step="any" min="0">
                   <br/>
                   <!-- y-->
@@ -213,7 +213,7 @@
                     <option value="in">in</option>
                     <option value="cm">cm</option>
                     <option value="mm">mm</option>
-                    <option value="pt">pt</option>
+                    <friday reboption value="pt">pt</option>
                     <option value="pc">pc</option>
                     <option value="%">%</option>
                   </select>
@@ -236,7 +236,7 @@
               <label for="desc">Description:</label>
               <input type="text" name="desc">
               </br>
-              <button type="submit">Create SVG</button>
+              <butfriday rebton type="submit">Create SVG</button>
             </form>
           </div>
           <div class="upload-image">
@@ -259,7 +259,7 @@
         <!-- table for editing attributes-->
         <div class="edit-attr">
             <!--NEEDS a dropdown and a view for each type of element based on
-                seleted attribute-->
+                friday rebseleted attribute-->
           <form class="edit-SVG" action="/editsvg" method="post">
             <div class="attr-dropdown-wrapper">
               <div class="inline-titles">
@@ -283,7 +283,7 @@
                   <th>New Value</th>
                 </thead>
                 <tbody class="attr-table">
-                  <tr>
+              friday reb    <tr>
                     <td>No Attibutes</td>
                     <td></td>
                     <td></td>
@@ -305,7 +305,7 @@
                         <label for="factor">Scale Factor:</label>
                         <input type="number" name="factor" value="" step="any" min="0.01">
 
-                    </div>
+              friday reb      </div>
                     <!--radio buttons to pick what should be scaled -->
                     <div class="scaleType-input">
                         <label for="scaleType">Scale Type</label>
@@ -339,34 +339,213 @@
           <button type="button" name="button" onclick="storeFilesDB()">Store All Files</button>
           <button type="button" name="button" onclick="delFilesDB()">Clear All Data</button>
           <button type="button" name="button" onclick="displayDBStatus()">Display DB Status</button>
-          <button type="button" name="button">Execute Query</button>
+          <button type="button" name="button" onclick="executeQuery()">Execute Query</button>
+          <form class="executeForm" >
+
+            <!--the type of query for exectuing -->
+            <div class="queryTypes">
+
+              <label for="all-files">Show all files: </label>
+              <input type="radio" name="executeOption" value="all-files"/>
+
+              <label for="files-created-from-dates">Show files created from data: </label>
+              <input type="radio" name="executeOption" value="files-created-from-dates"/>
+
+              <label for="files-modified-from-dates">Show files modified from data: </label>
+              <input type="radio" name="executeOption" value="files-modified-from-dates"/>
+
+              <label for="files-shape-count">Show files with n shape: </label>
+              <input type="radio" name="executeOption" value="files-shape-count"/>
+
+              <label for="files-n">Show n most freq downloaded: </label>
+              <input type="radio" name="executeOption" value="files-n"/>
+
+              <label for="changes-to-file">Show changes to current file: </label>
+              <input type="radio" name="executeOption" value="changes-to-file"/>
+
+            </div>
+          </form>
+
+          <!--types of query -->
           <div class="queryOptions">
+            <div class="all-files">
+              <form id="all-files-form">
+                <!-- -- label for sort options -->
+                <label for="querySort">Sort By</label>
+                <br/>
 
-            <label for="all-files">Show all files: </label>
-            <input type="radio" name="executeOption" value="all-files"/>
+                <label for="file_name">Name: </label>
+                <input type="radio" name="querySort" value="file_name">
+                <br/>
 
-            <label for="files-created-from-dates">Show files created from data: </label>
-            <input type="radio" name="executeOption" value="files-created-from-dates"/>
+                <label for="file_size">File Size: </label>
+                <input type="radio" name="querySort" value="file_size">
+              </form>
 
-            <label for="files-modified-from-dates">Show files modified from data: </label>
-            <input type="radio" name="executeOption" value="files-modified-from-dates"/>
+            </div>
+            <div class="files-created-from-dates">
+              <form id="files-created-from-dates-form">
+                <!-- -- label for sort options -->
+                <label for="querySort">Sort By</label>
+                <br/>
+                <label for="file_name">Name: </label>
+                <input type="radio" name="querySort" value="file_name">
 
-            <label for="files-shape-count">Show files with n shape: </label>
-            <input type="radio" name="executeOption" value="files-shape-count"/>
+                <label for="start_date">Start Date: </label>
+                <input type="date" name="start_date">
+                <br/>
 
-            <label for="files-n">Show n most freq downloaded: </label>
-            <input type="radio" name="executeOption" value="files-n"/>
+                <label for="file_size">File Size: </label>
+                <input type="radio" name="querySort" value="file_size">
 
-            <label for="changes-to-file">Show changes to current file: </label>
-            <input type="radio" name="executeOption" value="changes-to-file"/>
+                <label for="end_date">End Date: </label>
+                <input type="date" name="end_date">
+                <br/>
 
+                <label for="creation_time">Creation Date: </label>
+                <input type="radio" name="querySort" value="creation_time">
+                <br/>
+              </form>
+
+            </div>
+            <div class="files-modified-from-dates">
+              <form id="files-modified-from-dates-form">
+                <!-- -- label for sort options -->
+                <label for="querySort">Sort By</label>
+                <br/>
+
+
+                <label for="file_name">Name: </label>
+                <input type="radio" name="querySort" value="file_name">
+
+                <label for="start_date">Start Date: </label>
+                <input type="date" name="start_date">
+                <br/>
+
+                <label for="file_size">File Size: </label>
+                <input type="radio" name="querySort" value="file_size">
+
+                <label for="end_date">End Date: </label>
+                <input type="date" name="end_date">
+                <br/>
+
+                <label for="change_time">Change Date: </label>
+                <input type="radio" name="querySort" value="change_time">
+                <br/>
+              </form>
+            </div>
+
+            <div class="files-shape-count">
+              <form id="shape-count-form">
+                <div class="sort-radio">
+                  <!-- -- label for sort options -->
+                  <label for="querySort">Sort By</label>
+                  <br>
+
+                  <label for="file_name">Name: </label>
+                  <input type="radio" name="querySort" value="file_name">
+                  <br>
+
+                  <label for="file_size">File Size: </label>
+                  <input type="radio" name="querySort" value="file_size">
+                  <br>
+
+                  <label for="shape_count">Shape Count : </label>
+                  <input type="radio" name="querySort" value="shape_count">
+                </div>
+                <div class="shape-count">
+                  <label>Shape Count</label>
+                  <br>
+
+                  <label for="shape-lower-bound">Lower Bound: </label>
+                  <input type="number" name="shape-lower-bound" value="0">
+                  <br>
+
+                  <label for="shape-upper-bound">Upper Bound: </label>
+                  <input type="number" name="shape-upper-bound" value="0">
+                </div>
+                <div class="shape-type">
+                  <label for="shape-type">Shape Type</label>
+                  <br>
+
+                  <label for="n_circ">Circle: </label>
+                  <input type="radio" name="shape-type" value="n_circ">
+                  <br>
+
+
+                  <label for="n_path">Path: </label>
+                  <input type="radio" name="shape-type" value="n_path">
+                  <br>
+
+                  <label for="n_rect">Rect: </label>
+                  <input type="radio" name="shape-type" value="n_rect">
+                  <br>
+
+                  <label for="n_group">Group: </label>
+                  <input type="radio" name="shape-type" value="n_group">
+                  <br>
+                </div>
+
+              </form>
+
+            </div>
+            <div class="files-n">
+              <form id="files-n-form">
+                <div class="sort-radio">
+                  <!-- -- label for sort options -->
+                  <label for="querySort">Sort By</label>
+                  <br>
+
+                  <label for="file_name">Name: </label>
+                  <input type="radio" name="querySort" value="file_name">
+                  <br>
+
+                  <label for="n_downlaod">Download Count: </label>
+                  <input type="radio" name="querySort" value="n_downlaod">
+                </div>
+                <label for="print-n">Querys To Print</label>
+                <input type="number" name="print-n" value="10" min="0">
+
+              </form>
+            </div>
+
+            <div class="changes-to-file">
+              <form id="changes-to-file-form">
+                <div class="sort-radio">
+                  <!-- -- label for sort options -->
+                  <label for="querySort">Sort By</label>
+                  <br>
+                  <label for="change_type">Change Type: </label>
+                  <input type="radio" name="querySort" value="change_type">
+                  <br>
+
+                  <label for="recent_change">Recent Change First: </label>
+                  <input type="radio" name="querySort" value="recent_change_first">
+                  <br>
+
+                  <label for="n_downlaod">Recent Change Last: </label>
+                  <input type="radio" name="querySort" value="recent_change_last">
+                </div>
+                <div class="date">
+                  <label for="start_date">Start Date: </label>
+                  <input type="date" name="start_date">
+                  <br/>
+
+                  <label for="end_date">End Date: </label>
+                  <input type="date" name="end_date">
+                  <br/>
+
+                </div>
+
+              </form>
+              </div>
           </div>
 
           <table class="DBTable table table-striped">
             <thead>
               <th>DATA BASE QUERY RESULT</th>
             </thead>
-            <tbody>
+            <tbody id="dbTableBody">
               <td></td>
             </tbody>
           </table>

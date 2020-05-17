@@ -442,9 +442,10 @@ app.get("/addFilesDB", async (req,res) => {
             if(compStr != null){
               try{
                 comp = JSON.parse(compStr.toString("utf-8"));
+                console.log(comp);
               } catch(err){
                 console.log("failed to parse JSON");
-                return res.send(null);
+                continue;
               }
             }
             img.fileName = file;
@@ -523,12 +524,274 @@ app.get('/addChangeToDB', async (req,res) =>{
     }
     svg_id = svg_id["svg_id"];
     console.log(svg_id);
+    await connection.execute(`UPDATE FILE SET file_size = ${sizeOfFile(req.query.fileName)} WHERE  svg_id = ${svg_id};`);
     await connection.execute(`INSERT IMG_CHANGE(change_id,change_type,change_summary,change_time,svg_id)
         VALUES (NULL,'${req.query.change_type}','${req.query.change_summary}',CURRENT_TIMESTAMP(),${svg_id});`);
     connection.end();
   }catch(e){console.log(e);}
   return res.send("file added to change db");
 })
+
+app.get("/all-files-query", async (req,res) =>{
+  let data,fields = null;
+  let returnData = {string:`<tr>
+      <td>File Name</td>
+      <td>File Title</td>
+      <td>File Desc</td>
+      <td>Rect Count</td>
+      <td>Circ Count</td>
+      <td>Path Count</td>
+      <td>Group Count</td>
+      <td>Creation Time</td>
+      <td>File Size(KB)</td>
+    </tr>`};
+  try{
+    //gets length from all tables
+    let connection = await mysql.createConnection(req.query.connectionInfo);
+    [data, fields] = await connection.execute("SELECT * FROM FILE ORDER BY " + req.query.sort);
+
+
+    for(let obj of data){
+      returnData.string += `<tr>
+      <td>${obj.file_name}</td>
+      <td>${obj.file_title}</td>
+      <td>${obj.file_description}</td>
+      <td>${obj.n_rect}</td>
+      <td>${obj.n_circ}</td>
+      <td>${obj.n_path}</td>
+      <td>${obj.n_group}</td>
+      <td>${obj.creation_time}</td>
+      <td>${obj.file_size}</td>
+      </tr>`
+    }
+    if(data.length == 0){
+      returnData.string += "<tr><td>No Files Found</td></tr>"
+    }
+    connection.end();
+  }catch(e){console.log(e);}
+  return res.send(returnData);
+});
+
+app.get("/files-created-query", async (req,res) =>{
+  let data,fields = null;
+  let returnData = {string:`<tr>
+      <td>File Name</td>
+      <td>File Title</td>
+      <td>File Desc</td>
+      <td>Rect Count</td>
+      <td>Circ Count</td>
+      <td>Path Count</td>
+      <td>Group Count</td>
+      <td>Creation Time</td>
+      <td>File Size(KB)</td>
+    </tr>`};
+  try{
+    //gets length from all tables
+    let connection = await mysql.createConnection(req.query.connectionInfo);
+
+    [data, fields] = await connection.execute(`SELECT * FROM FILE WHERE creation_time >= '${req.query.startDate}' AND creation_time <= '${req.query.endDate}' ORDER BY ${req.query.sort}`);
+
+
+    for(let obj of data){
+      returnData.string += `<tr>
+      <td>${obj.file_name}</td>
+      <td>${obj.file_title}</td>
+      <td>${obj.file_description}</td>
+      <td>${obj.n_rect}</td>
+      <td>${obj.n_circ}</td>
+      <td>${obj.n_path}</td>
+      <td>${obj.n_group}</td>
+      <td>${obj.creation_time}</td>
+      <td>${obj.file_size}</td>
+      </tr>`
+    }
+    if(data.length == 0){
+      returnData.string += "<tr><td>No Files Found</td></tr>"
+    }
+
+    connection.end();
+  }catch(e){console.log(e);}
+  return res.send(returnData);
+});
+//get date mod date changes filename file
+app.get("/files-mod-query", async (req,res) =>{
+  let data,fields = null;
+  let returnData = {string:`<tr>
+      <td>File Name</td>
+      <td>File Size</td>
+      <td>Recent Change</td>
+      <td>Number Of Changes</td>
+    </tr>`};
+  try{
+    //gets length from all tables
+    let connection = await mysql.createConnection(req.query.connectionInfo);
+
+    //create table with max change time and how many times each one was changed
+    await connection.execute(`CREATE VIEW MODIFIED(svg_id,n_mod,change_time)
+      AS SELECT i.svg_id, COUNT(*), MAX(change_time)
+      FROM IMG_CHANGE as i
+      WHERE (change_time >= '${req.query.startDate}' AND change_time <= '${req.query.endDate}')
+      GROUP BY i.svg_id ; `);
+
+    //merges modified with file table and orders it to spec
+    [data, fields] = await connection.execute(`SELECT * FROM MODIFIED
+      right OUTER JOIN
+      FILE ON MODIFIED.svg_id = FILE.svg_id
+      ORDER BY ${req.query.sort} ${(req.query.sort == "change_time")? "DESC":""};`);
+
+    //gets rid of the used temp view
+    await connection.execute("DROP VIEW MODIFIED");
+
+    for(let obj of data){
+      if(!obj.n_mod) obj.n_mod = 0;
+      if(!obj.change_time) obj.change_time = "NA"
+      returnData.string += `<tr>
+      <td>${obj.file_name}</td>
+      <td>${obj.file_size}</td>
+      <td>${obj.change_time}</td>
+      <td>${obj.n_mod}</td>
+      </tr>`
+
+    }
+    if(data.length == 0){
+      returnData.string += "<tr><td>No Files Found</td></tr>"
+    }
+
+    connection.end();
+  }catch(e){console.log(e);}
+  return res.send(returnData);
+});
+
+app.get("/files-shape-query", async (req,res) =>{
+  let data,fields = null;
+  let returnData = {string:`<tr>
+      <td>File Name</td>
+      <td>File Title</td>
+      <td>File Desc</td>
+      <td>Rect Count</td>
+      <td>Circ Count</td>
+      <td>Path Count</td>
+      <td>Group Count</td>
+      <td>Creation Time</td>
+      <td>File Size(KB)</td>
+    </tr>`};
+  try{
+    //gets length from all tables
+    let connection = await mysql.createConnection(req.query.connectionInfo);
+    [data, fields] = await connection.execute(`SELECT * FROM FILE
+      WHERE ${req.query.type} >= ${req.query.lower} AND ${req.query.type} <= ${req.query.upper}
+      ORDER BY ` + req.query.sort);
+
+
+    for(let obj of data){
+      returnData.string += `<tr>
+      <td>${obj.file_name}</td>
+      <td>${obj.file_title}</td>
+      <td>${obj.file_description}</td>
+      <td>${obj.n_rect}</td>
+      <td>${obj.n_circ}</td>
+      <td>${obj.n_path}</td>
+      <td>${obj.n_group}</td>
+      <td>${obj.creation_time}</td>
+      <td>${obj.file_size}</td>
+      </tr>`
+    }
+    if(data.length == 0){
+      returnData.string += "<tr><td>No Files Found</td></tr>"
+    }
+    connection.end();
+  }catch(e){console.log(e);}
+  return res.send(returnData);
+});
+
+app.get("/files-n-query", async (req,res) =>{
+  let data,fields = null;
+  let returnData = {string:`<tr>
+      <td>File Name</td>
+      <td>File Size</td>
+      <td>Number Of Download</td>
+    </tr>`};
+  try{
+    //gets length from all tables
+    let connection = await mysql.createConnection(req.query.connectionInfo);
+
+    //create table with max change time and how many times each one was changed
+    await connection.execute(`CREATE VIEW MODIFIED(svg_id,n_downlaod)
+      AS SELECT svg_id, COUNT(*)
+      FROM DOWNLOAD
+      GROUP BY svg_id ; `);
+
+    //merges modified with file table and orders it to spec
+    [data, fields] = await connection.execute(`SELECT * FROM MODIFIED
+      right OUTER JOIN
+      FILE ON MODIFIED.svg_id = FILE.svg_id
+      ORDER BY ${req.query.sort} ${(req.query.sort != "file_name")? "DESC":""};`);
+
+    //gets rid of the used temp view
+    await connection.execute("DROP VIEW MODIFIED");
+
+
+    for(let obj of data){
+      //prints n instances
+      if(req.query.nCount-- == 0) break;
+
+      if(!obj.n_downlaod) obj.n_downlaod = 0;
+      returnData.string += `<tr>
+      <td>${obj.file_name}</td>
+      <td>${obj.file_size}</td>
+      <td>${obj.n_downlaod}</td>
+      </tr>`
+
+    }
+    if(data.length == 0){
+      returnData.string += "<tr><td>No Files Found</td></tr>"
+    }
+
+    connection.end();
+  }catch(e){console.log(e);}
+  return res.send(returnData);
+});
+
+app.get("/changes-query", async (req,res) =>{
+  let data,fields = null;
+  let returnData = {string:`<tr>
+      <td>File Name</td>
+      <td>Change Type</td>
+      <td>Change Summary</td>
+      <td>Time of Change</td>
+    </tr>`};
+  try{
+    //gets length from all tables
+    let connection = await mysql.createConnection(req.query.connectionInfo);
+
+    //merges modified with file table and orders it to spec
+    [data, fields] = await connection.execute(`SELECT * FROM IMG_CHANGE
+      right OUTER JOIN
+      FILE ON IMG_CHANGE.svg_id = FILE.svg_id
+      WHERE FILE.file_name = '${req.query.file_name}'
+      AND (change_time >= '${req.query.startDate}' AND change_time <= '${req.query.endDate}')
+      ORDER BY ${req.query.sort} ${(req.query.reverse)? "DESC":""};`);
+
+
+    for(let obj of data){
+      returnData.string += `<tr>
+      <td>${obj.file_name}</td>
+      <td>${obj.change_type}</td>
+      <td>${obj.change_summary}</td>
+      <td>${obj.change_time}</td>
+      </tr>`
+
+    }
+    if(data.length == 0){
+      returnData.string += "<tr><td>No Files Found</td></tr>"
+    }
+
+    connection.end();
+  }catch(e){console.log(e);}
+  return res.send(returnData);
+});
+
+
 /**HELPER FUCNTIONS*/
 function sizeOfFile(fileName){ //divide by 1024 to get kb
     return fs.statSync("uploads/"+fileName).size/1024;
