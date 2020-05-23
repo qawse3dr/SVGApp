@@ -110,7 +110,7 @@
 
         </div>
         <!-- SVG View Panel-->
-        <div class="sfriday rebvg-view-panel">
+        <div class="svg-view-panel">
           <h3>SVG view</h3>
 
           <table  class="table table-striped"  id="svg-view-table">
@@ -144,7 +144,7 @@
 
             <tbody id="svg-components" >
 
-            </tbody>friday reb
+            </tbody>
           </table>
         </div>
 
@@ -180,7 +180,7 @@
                         <option value="pc">pc</option>
                         <option value="%">%</option>
 
-                    friday reb</select>
+                    </select>
                     <br/>
                     <label for="y">Y:</label>
                     <input type="number" name="y" value="0" placeholder='0' step="any">
@@ -198,7 +198,7 @@
                   <label for="cx">CX:</label>
                   <input type="number" name="cx" value="0" step="any" >
                   <!-- r-->
-                  <friday reblabel for="r">R:</label>
+                  <label for="r">R:</label>
                   <input type="number" name="r" value="0" step="any" min="0">
                   <br/>
                   <!-- y-->
@@ -213,7 +213,7 @@
                     <option value="in">in</option>
                     <option value="cm">cm</option>
                     <option value="mm">mm</option>
-                    <friday reboption value="pt">pt</option>
+                    <option value="pt">pt</option>
                     <option value="pc">pc</option>
                     <option value="%">%</option>
                   </select>
@@ -236,7 +236,7 @@
               <label for="desc">Description:</label>
               <input type="text" name="desc">
               </br>
-              <butfriday rebton type="submit">Create SVG</button>
+              <button type="submit">Create SVG</button>
             </form>
           </div>
           <div class="upload-image">
@@ -259,7 +259,7 @@
         <!-- table for editing attributes-->
         <div class="edit-attr">
             <!--NEEDS a dropdown and a view for each type of element based on
-                friday rebseleted attribute-->
+                seleted attribute-->
           <form class="edit-SVG" action="/editsvg" method="post">
             <div class="attr-dropdown-wrapper">
               <div class="inline-titles">
@@ -283,7 +283,7 @@
                   <th>New Value</th>
                 </thead>
                 <tbody class="attr-table">
-              friday reb    <tr>
+                  <tr>
                     <td>No Attibutes</td>
                     <td></td>
                     <td></td>
@@ -305,7 +305,7 @@
                         <label for="factor">Scale Factor:</label>
                         <input type="number" name="factor" value="" step="any" min="0.01">
 
-              friday reb      </div>
+                    </div>
                     <!--radio buttons to pick what should be scaled -->
                     <div class="scaleType-input">
                         <label for="scaleType">Scale Type</label>

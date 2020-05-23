@@ -622,9 +622,10 @@ app.get("/files-mod-query", async (req,res) =>{
       <td>Recent Change</td>
       <td>Number Of Changes</td>
     </tr>`};
+  let connection = null;
   try{
     //gets length from all tables
-    let connection = await mysql.createConnection(req.query.connectionInfo);
+    connection = await mysql.createConnection(req.query.connectionInfo);
 
     //create table with max change time and how many times each one was changed
     await connection.execute(`CREATE VIEW MODIFIED(svg_id,n_mod,change_time)
@@ -640,7 +641,7 @@ app.get("/files-mod-query", async (req,res) =>{
       ORDER BY ${req.query.sort} ${(req.query.sort == "change_time")? "DESC":""};`);
 
     //gets rid of the used temp view
-    await connection.execute("DROP VIEW MODIFIED");
+    await connection.execute("DROP VIEW MODIFIED;");
 
     for(let obj of data){
       if(!obj.n_mod) obj.n_mod = 0;
@@ -657,8 +658,12 @@ app.get("/files-mod-query", async (req,res) =>{
       returnData.string += "<tr><td>No Files Found</td></tr>"
     }
 
-    connection.end();
   }catch(e){console.log(e);}
+  try{
+    //gets rid of the used temp view
+    await connection.execute("DROP VIEW MODIFIED;");
+  }catch(e){console.log(e);}
+  connection.end();
   return res.send(returnData);
 });
 
@@ -728,7 +733,7 @@ app.get("/files-n-query", async (req,res) =>{
       ORDER BY ${req.query.sort} ${(req.query.sort != "file_name")? "DESC":""};`);
 
     //gets rid of the used temp view
-    await connection.execute("DROP VIEW MODIFIED");
+    await connection.execute("DROP VIEW MODIFIED;");
 
 
     for(let obj of data){
